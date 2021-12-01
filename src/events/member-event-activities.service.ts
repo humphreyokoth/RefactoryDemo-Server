@@ -34,7 +34,7 @@ export class MemberEventActivitiesService {
     return data;
   }
 
-  async findAll(req: MemberEventActivitiesSearchDto,): Promise<any> {
+  async findAll(): Promise<any> {
     console.log("finding all");
     const allActivities = await this.eventActivityrepository.find({});
 
@@ -42,13 +42,13 @@ export class MemberEventActivitiesService {
 
     for (let i = 0; i < allActivities.length; i++) {
       const data = await this.repository.find({
-        where: { activityId: allActivities[i].id, contactId: req.contactId },
+        where: { activityId: allActivities[i].id },
 
         relations: ["activity", "contact", "contact.person"],
       });
 
       const member = [];
-      if (data && data.length > 0) {
+      if (data) {
         for (let j = 0; j < data.length; j++) {
           const fullName = `${data[j].contact.person.firstName} ${data[j].contact.person.lastName}`;
           member.push({
@@ -57,10 +57,9 @@ export class MemberEventActivitiesService {
             id: data[j].id,
           });
         }
-        const allData = { activity: allActivities[i].name, members: member };
-        toDto.push(allData);
       }
-      
+      const allData = { activity: allActivities[i].name, members: member };
+      toDto.push(allData);
     }
 
     return toDto;

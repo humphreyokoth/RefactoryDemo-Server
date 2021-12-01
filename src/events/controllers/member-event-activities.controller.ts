@@ -31,8 +31,8 @@ export class MemberEventActivitiesController {
   }
 
   @Get()
-  async findAll(@Query() req: MemberEventActivitiesSearchDto): Promise<MemberEventActivities[]> {
-    return await this.service.findAll(req);
+  async findAll(): Promise<MemberEventActivities[]> {
+    return await this.service.findAll();
   }
 
   @Get("/:id")
